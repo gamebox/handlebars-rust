@@ -1039,13 +1039,65 @@
 <span id="1039">1039</span>
 <span id="1040">1040</span>
 <span id="1041">1041</span>
+<span id="1042">1042</span>
+<span id="1043">1043</span>
+<span id="1044">1044</span>
+<span id="1045">1045</span>
+<span id="1046">1046</span>
+<span id="1047">1047</span>
+<span id="1048">1048</span>
+<span id="1049">1049</span>
+<span id="1050">1050</span>
+<span id="1051">1051</span>
+<span id="1052">1052</span>
+<span id="1053">1053</span>
+<span id="1054">1054</span>
+<span id="1055">1055</span>
+<span id="1056">1056</span>
+<span id="1057">1057</span>
+<span id="1058">1058</span>
+<span id="1059">1059</span>
+<span id="1060">1060</span>
+<span id="1061">1061</span>
+<span id="1062">1062</span>
+<span id="1063">1063</span>
+<span id="1064">1064</span>
+<span id="1065">1065</span>
+<span id="1066">1066</span>
+<span id="1067">1067</span>
+<span id="1068">1068</span>
+<span id="1069">1069</span>
+<span id="1070">1070</span>
+<span id="1071">1071</span>
+<span id="1072">1072</span>
+<span id="1073">1073</span>
+<span id="1074">1074</span>
+<span id="1075">1075</span>
+<span id="1076">1076</span>
+<span id="1077">1077</span>
+<span id="1078">1078</span>
+<span id="1079">1079</span>
+<span id="1080">1080</span>
+<span id="1081">1081</span>
+<span id="1082">1082</span>
+<span id="1083">1083</span>
+<span id="1084">1084</span>
+<span id="1085">1085</span>
+<span id="1086">1086</span>
+<span id="1087">1087</span>
+<span id="1088">1088</span>
+<span id="1089">1089</span>
+<span id="1090">1090</span>
+<span id="1091">1091</span>
+<span id="1092">1092</span>
+<span id="1093">1093</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">VecDeque</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">From</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">iter</span>::<span class="ident">Peekable</span>;
 
 <span class="kw">use</span> <span class="ident">grammar</span>::{<span class="ident">HandlebarsParser</span>, <span class="ident">Rule</span>};
-<span class="kw">use</span> <span class="ident">pest</span>::<span class="ident">iterators</span>::<span class="ident">FlatPairs</span>;
+<span class="kw">use</span> <span class="ident">pest</span>::<span class="ident">iterators</span>::<span class="ident">Pair</span>;
 <span class="kw">use</span> <span class="ident">pest</span>::<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">PestError</span>;
 <span class="kw">use</span> <span class="ident">pest</span>::{<span class="ident">Parser</span>, <span class="ident">Position</span>};
 
@@ -1171,10 +1223,6 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">unescape_tags</span>(<span class="ident">txt</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
-        <span class="ident">txt</span>.<span class="ident">replace</span>(<span class="string">r&quot;\\{{&quot;</span>, <span class="string">&quot;{{&quot;</span>)
-    }
-
     <span class="kw">fn</span> <span class="ident">push_element</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">e</span>: <span class="ident">TemplateElement</span>, <span class="ident">line</span>: <span class="ident">usize</span>, <span class="ident">col</span>: <span class="ident">usize</span>) {
         <span class="self">self</span>.<span class="ident">elements</span>.<span class="ident">push</span>(<span class="ident">e</span>);
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">maps</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">mapping</span> {
@@ -1189,7 +1237,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">parse_subexpression</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="ident">FlatPairs</span><span class="op">&lt;</span><span class="ident">Rule</span><span class="op">&gt;&gt;</span>,
+        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Pair</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Rule</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
         <span class="ident">limit</span>: <span class="ident">usize</span>,
     ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Parameter</span>, <span class="ident">TemplateError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">espec</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">Template</span>::<span class="ident">parse_expression</span>(<span class="ident">source</span>, <span class="ident">it</span>.<span class="ident">by_ref</span>(), <span class="ident">limit</span>));
@@ -1208,7 +1256,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">parse_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="ident">FlatPairs</span><span class="op">&lt;</span><span class="ident">Rule</span><span class="op">&gt;&gt;</span>,
+        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Pair</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Rule</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
         <span class="kw">_</span>: <span class="ident">usize</span>,
     ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Parameter</span>, <span class="ident">TemplateError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">name_node</span> <span class="op">=</span> <span class="ident">it</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
@@ -1228,7 +1276,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">parse_param</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="ident">FlatPairs</span><span class="op">&lt;</span><span class="ident">Rule</span><span class="op">&gt;&gt;</span>,
+        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Pair</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Rule</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
         <span class="kw">_</span>: <span class="ident">usize</span>,
     ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Parameter</span>, <span class="ident">TemplateError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">param</span> <span class="op">=</span> <span class="ident">it</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
@@ -1274,7 +1322,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">parse_hash</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="ident">FlatPairs</span><span class="op">&lt;</span><span class="ident">Rule</span><span class="op">&gt;&gt;</span>,
+        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Pair</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Rule</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
         <span class="ident">limit</span>: <span class="ident">usize</span>,
     ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">Parameter</span>), <span class="ident">TemplateError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">it</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
@@ -1289,7 +1337,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">parse_block_param</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="ident">FlatPairs</span><span class="op">&lt;</span><span class="ident">Rule</span><span class="op">&gt;&gt;</span>,
+        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Pair</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Rule</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
         <span class="ident">limit</span>: <span class="ident">usize</span>,
     ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BlockParam</span>, <span class="ident">TemplateError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">p1_name</span> <span class="op">=</span> <span class="ident">it</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
@@ -1320,7 +1368,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">parse_expression</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="ident">FlatPairs</span><span class="op">&lt;</span><span class="ident">Rule</span><span class="op">&gt;&gt;</span>,
+        <span class="ident">it</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Pair</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Rule</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
         <span class="ident">limit</span>: <span class="ident">usize</span>,
     ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ExpressionSpec</span>, <span class="ident">TemplateError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">params</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Parameter</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
@@ -1392,6 +1440,45 @@
         }
     }
 
+    <span class="kw">fn</span> <span class="ident">raw_string</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
+        <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
+        <span class="ident">pair</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Pair</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Rule</span><span class="op">&gt;&gt;</span>,
+        <span class="ident">trim_left</span>: <span class="ident">bool</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">TemplateElement</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from</span>(<span class="ident">source</span>);
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">pair</span>) <span class="op">=</span> <span class="ident">pair</span> {
+            <span class="comment">// the source may contains leading space because of pest&#39;s limitation</span>
+            <span class="comment">// we calculate none space start here in order to correct the offset</span>
+            <span class="kw">let</span> <span class="ident">pair_span</span> <span class="op">=</span> <span class="ident">pair</span>.<span class="ident">clone</span>().<span class="ident">into_span</span>();
+
+            <span class="kw">let</span> <span class="ident">current_start</span> <span class="op">=</span> <span class="ident">pair_span</span>.<span class="ident">start</span>();
+            <span class="kw">let</span> <span class="ident">span_length</span> <span class="op">=</span> <span class="ident">pair_span</span>.<span class="ident">end</span>() <span class="op">-</span> <span class="ident">current_start</span>;
+            <span class="kw">let</span> <span class="ident">leading_space_offset</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident">span_length</span>;
+
+            <span class="comment">// we would like to iterate pair reversely in order to remove certain</span>
+            <span class="comment">// index from our string buffer so here we convert the inner pairs to</span>
+            <span class="comment">// a vector.</span>
+            <span class="kw">let</span> <span class="ident">pairs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Pair</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Rule</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">pair</span>.<span class="ident">into_inner</span>().<span class="ident">collect</span>();
+            <span class="kw">for</span> <span class="ident">sub_pair</span> <span class="kw">in</span> <span class="ident">pairs</span>.<span class="ident">into_iter</span>().<span class="ident">rev</span>() {
+                <span class="comment">// remove escaped backslash</span>
+                <span class="kw">if</span> <span class="ident">sub_pair</span>.<span class="ident">as_rule</span>() <span class="op">==</span> <span class="ident">Rule</span>::<span class="ident">escape</span> {
+                    <span class="kw">let</span> <span class="ident">escape_span</span> <span class="op">=</span> <span class="ident">sub_pair</span>.<span class="ident">into_span</span>();
+
+                    <span class="kw">let</span> <span class="ident">backslash_pos</span> <span class="op">=</span> <span class="ident">escape_span</span>.<span class="ident">start</span>();
+                    <span class="kw">let</span> <span class="ident">backslash_rel_pos</span> <span class="op">=</span> <span class="ident">leading_space_offset</span> <span class="op">+</span> <span class="ident">backslash_pos</span> <span class="op">-</span> <span class="ident">current_start</span>;
+                    <span class="ident">s</span>.<span class="ident">remove</span>(<span class="ident">backslash_rel_pos</span>);
+                }
+            }
+        }
+
+        <span class="kw">if</span> <span class="ident">trim_left</span> {
+            <span class="ident">RawString</span>(<span class="ident">s</span>.<span class="ident">trim_left</span>().<span class="ident">to_owned</span>())
+        } <span class="kw">else</span> {
+            <span class="ident">RawString</span>(<span class="ident">s</span>)
+        }
+    }
+
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">compile2</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;&gt;</span>(<span class="ident">source</span>: <span class="ident">S</span>, <span class="ident">mapping</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Template</span>, <span class="ident">TemplateError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">source</span>.<span class="ident">as_ref</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">helper_stack</span>: <span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">HelperTemplate</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">VecDeque</span>::<span class="ident">new</span>();
@@ -1423,13 +1510,19 @@
                 }
             })<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">it</span> <span class="op">=</span> <span class="ident">parser_queue</span>.<span class="ident">flatten</span>().<span class="ident">peekable</span>();
+        <span class="comment">// println!(&quot;{:?}&quot;, parser_queue.clone());</span>
+
+        <span class="comment">// remove escape from our pair queue</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">it</span> <span class="op">=</span> <span class="ident">parser_queue</span>
+            .<span class="ident">flatten</span>()
+            .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">as_rule</span>() <span class="op">!=</span> <span class="ident">Rule</span>::<span class="ident">escape</span>)
+            .<span class="ident">peekable</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">end_pos</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Position</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
         <span class="kw">loop</span> {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">pair</span>) <span class="op">=</span> <span class="ident">it</span>.<span class="ident">next</span>() {
                 <span class="kw">let</span> <span class="ident">prev_end</span> <span class="op">=</span> <span class="ident">end_pos</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">pos</span>()).<span class="ident">unwrap_or</span>(<span class="number">0</span>);
                 <span class="kw">let</span> <span class="ident">rule</span> <span class="op">=</span> <span class="ident">pair</span>.<span class="ident">as_rule</span>();
-                <span class="kw">let</span> <span class="ident">span</span> <span class="op">=</span> <span class="ident">pair</span>.<span class="ident">into_span</span>();
+                <span class="kw">let</span> <span class="ident">span</span> <span class="op">=</span> <span class="ident">pair</span>.<span class="ident">clone</span>().<span class="ident">into_span</span>();
 
                 <span class="kw">if</span> <span class="ident">rule</span> <span class="op">!=</span> <span class="ident">Rule</span>::<span class="ident">template</span> {
                     <span class="comment">// trailing string check</span>
@@ -1438,19 +1531,17 @@
                     {
                         <span class="kw">let</span> (<span class="ident">line_no</span>, <span class="ident">col_no</span>) <span class="op">=</span> <span class="ident">span</span>.<span class="ident">start_pos</span>().<span class="ident">line_col</span>();
                         <span class="kw">if</span> <span class="ident">rule</span> <span class="op">==</span> <span class="ident">Rule</span>::<span class="ident">raw_block_end</span> {
-                            <span class="kw">let</span> <span class="ident">text</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">source</span>[<span class="ident">prev_end</span>..<span class="ident">span</span>.<span class="ident">start</span>()];
                             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">Template</span>::<span class="ident">new</span>(<span class="ident">mapping</span>);
                             <span class="ident">t</span>.<span class="ident">push_element</span>(
-                                <span class="ident">RawString</span>(<span class="ident">Template</span>::<span class="ident">unescape_tags</span>(<span class="ident">text</span>)),
+                                <span class="ident">Template</span>::<span class="ident">raw_string</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>[<span class="ident">prev_end</span>..<span class="ident">span</span>.<span class="ident">start</span>()], <span class="prelude-val">None</span>, <span class="bool-val">false</span>),
                                 <span class="ident">line_no</span>,
                                 <span class="ident">col_no</span>,
                             );
                             <span class="ident">template_stack</span>.<span class="ident">push_front</span>(<span class="ident">t</span>);
                         } <span class="kw">else</span> {
-                            <span class="kw">let</span> <span class="ident">text</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">source</span>[<span class="ident">prev_end</span>..<span class="ident">span</span>.<span class="ident">start</span>()];
                             <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">template_stack</span>.<span class="ident">front_mut</span>().<span class="ident">unwrap</span>();
                             <span class="ident">t</span>.<span class="ident">push_element</span>(
-                                <span class="ident">RawString</span>(<span class="ident">Template</span>::<span class="ident">unescape_tags</span>(<span class="ident">text</span>)),
+                                <span class="ident">Template</span>::<span class="ident">raw_string</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>[<span class="ident">prev_end</span>..<span class="ident">span</span>.<span class="ident">start</span>()], <span class="prelude-val">None</span>, <span class="bool-val">false</span>),
                                 <span class="ident">line_no</span>,
                                 <span class="ident">col_no</span>,
                             );
@@ -1470,12 +1561,17 @@
                         } <span class="kw">else</span> {
                             <span class="ident">span</span>.<span class="ident">start</span>()
                         };
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">text</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">source</span>[<span class="ident">start</span>..<span class="ident">span</span>.<span class="ident">end</span>()];
-                        <span class="kw">if</span> <span class="ident">omit_pro_ws</span> {
-                            <span class="ident">text</span> <span class="op">=</span> <span class="ident">text</span>.<span class="ident">trim_left</span>();
-                        }
+
                         <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">template_stack</span>.<span class="ident">front_mut</span>().<span class="ident">unwrap</span>();
-                        <span class="ident">t</span>.<span class="ident">push_element</span>(<span class="ident">RawString</span>(<span class="ident">Template</span>::<span class="ident">unescape_tags</span>(<span class="ident">text</span>)), <span class="ident">line_no</span>, <span class="ident">col_no</span>);
+                        <span class="ident">t</span>.<span class="ident">push_element</span>(
+                            <span class="ident">Template</span>::<span class="ident">raw_string</span>(
+                                <span class="kw-2">&amp;</span><span class="ident">source</span>[<span class="ident">start</span>..<span class="ident">span</span>.<span class="ident">end</span>()],
+                                <span class="prelude-val">Some</span>(<span class="ident">pair</span>.<span class="ident">clone</span>()),
+                                <span class="ident">omit_pro_ws</span>,
+                            ),
+                            <span class="ident">line_no</span>,
+                            <span class="ident">col_no</span>,
+                        );
                     }
                     <span class="ident">Rule</span>::<span class="ident">helper_block_start</span>
                     <span class="op">|</span> <span class="ident">Rule</span>::<span class="ident">raw_block_start</span>
@@ -1533,12 +1629,12 @@
                         <span class="ident">h</span>.<span class="ident">template</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">t</span>);
                     }
                     <span class="ident">Rule</span>::<span class="ident">raw_block_text</span> <span class="op">=&gt;</span> {
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">text</span> <span class="op">=</span> <span class="ident">span</span>.<span class="ident">as_str</span>();
-                        <span class="kw">if</span> <span class="ident">omit_pro_ws</span> {
-                            <span class="ident">text</span> <span class="op">=</span> <span class="ident">text</span>.<span class="ident">trim_left</span>();
-                        }
                         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">Template</span>::<span class="ident">new</span>(<span class="ident">mapping</span>);
-                        <span class="ident">t</span>.<span class="ident">push_element</span>(<span class="ident">RawString</span>(<span class="ident">Template</span>::<span class="ident">unescape_tags</span>(<span class="ident">text</span>)), <span class="ident">line_no</span>, <span class="ident">col_no</span>);
+                        <span class="ident">t</span>.<span class="ident">push_element</span>(
+                            <span class="ident">Template</span>::<span class="ident">raw_string</span>(<span class="ident">span</span>.<span class="ident">as_str</span>(), <span class="prelude-val">Some</span>(<span class="ident">pair</span>.<span class="ident">clone</span>()), <span class="ident">omit_pro_ws</span>),
+                            <span class="ident">line_no</span>,
+                            <span class="ident">col_no</span>,
+                        );
                         <span class="ident">template_stack</span>.<span class="ident">push_front</span>(<span class="ident">t</span>);
                     }
                     <span class="ident">Rule</span>::<span class="ident">expression</span>
@@ -1707,7 +1803,7 @@
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">test_parse_escaped_tag_raw_string</span>() {
-    <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="string">r&quot;foo \\{{bar}}&quot;</span>;
+    <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="string">r&quot;foo \{{bar}}&quot;</span>;
     <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">Template</span>::<span class="ident">compile</span>(<span class="ident">source</span>.<span class="ident">to_string</span>()).<span class="ident">ok</span>().<span class="ident">unwrap</span>();
     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">t</span>.<span class="ident">elements</span>.<span class="ident">len</span>(), <span class="number">1</span>);
     <span class="macro">assert_eq</span><span class="macro">!</span>(
@@ -1717,8 +1813,16 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">test_pure_backslash_raw_string</span>() {
+    <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="string">r&quot;\\\\&quot;</span>;
+    <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">Template</span>::<span class="ident">compile</span>(<span class="ident">source</span>).<span class="ident">ok</span>().<span class="ident">unwrap</span>();
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">t</span>.<span class="ident">elements</span>.<span class="ident">len</span>(), <span class="number">1</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="ident">t</span>.<span class="ident">elements</span>.<span class="ident">get</span>(<span class="number">0</span>).<span class="ident">unwrap</span>(), <span class="ident">RawString</span>(<span class="ident">source</span>.<span class="ident">to_string</span>()));
+}
+
+<span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">test_parse_escaped_block_raw_string</span>() {
-    <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="string">r&quot;\\{{{{foo}}}} bar&quot;</span>;
+    <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="string">r&quot;\{{{{foo}}}} bar&quot;</span>;
     <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">Template</span>::<span class="ident">compile</span>(<span class="ident">source</span>.<span class="ident">to_string</span>()).<span class="ident">ok</span>().<span class="ident">unwrap</span>();
     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">t</span>.<span class="ident">elements</span>.<span class="ident">len</span>(), <span class="number">1</span>);
     <span class="macro">assert_eq</span><span class="macro">!</span>(

@@ -312,8 +312,28 @@
 <span id="312">312</span>
 <span id="313">313</span>
 <span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
 </pre><pre class="rust ">
-<span class="comment">//const _GRAMMAR: &amp;&#39;static str = include_str!(&quot;grammar.pest&quot;);</span>
+<span class="comment">// const _GRAMMAR: &amp;&#39;static str = include_str!(&quot;grammar.pest&quot;);</span>
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Parser</span>)]</span>
 <span class="attribute">#[<span class="ident">grammar</span> <span class="op">=</span> <span class="string">&quot;grammar.pest&quot;</span>]</span>
@@ -338,6 +358,21 @@
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">assert_not_rule</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="kw">in</span>:<span class="macro-nonterminal">expr</span>) <span class="op">=&gt;</span> {
+        <span class="macro">assert</span><span class="macro">!</span>(
+            <span class="ident">HandlebarsParser</span>::<span class="ident">parse</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>, <span class="macro-nonterminal">$</span><span class="kw">in</span>).<span class="macro-nonterminal">is_err</span>()
+                <span class="op">||</span> <span class="ident">HandlebarsParser</span>::<span class="ident">parse</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>, <span class="macro-nonterminal">$</span><span class="kw">in</span>)
+                    .<span class="macro-nonterminal">unwrap</span>()
+                    .<span class="ident">last</span>()
+                    .<span class="ident">unwrap</span>()
+                    .<span class="ident">into_span</span>()
+                    .<span class="ident">end</span>() <span class="op">!=</span> <span class="macro-nonterminal">$</span><span class="kw">in</span>.<span class="macro-nonterminal">len</span>()
+        );
+    };
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">assert_rule_match</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="kw">in</span>:<span class="macro-nonterminal">expr</span>) <span class="op">=&gt;</span> {
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">HandlebarsParser</span>::<span class="ident">parse</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>, <span class="macro-nonterminal">$</span><span class="kw">in</span>).<span class="macro-nonterminal">is_ok</span>());
@@ -348,12 +383,17 @@
 <span class="kw">fn</span> <span class="ident">test_raw_text</span>() {
     <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
         <span class="string">&quot;&lt;h1&gt; helloworld &lt;/h1&gt;    &quot;</span>,
-        <span class="string">&quot;hello\\{{world}}&quot;</span>,
-        <span class="string">&quot;hello\\{{#if world}}nice\\{{/if}}&quot;</span>,
-        <span class="string">&quot;hello \\{{{{raw}}}}hello\\{{{{/raw}}}}&quot;</span>,
+        <span class="string">r&quot;hello\{{world}}&quot;</span>,
+        <span class="string">r&quot;hello\{{#if world}}nice\{{/if}}&quot;</span>,
+        <span class="string">r&quot;hello \{{{{raw}}}}hello\{{{{/raw}}}}&quot;</span>,
     ];
     <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">s</span>.<span class="ident">iter</span>() {
         <span class="macro">assert_rule</span><span class="macro">!</span>(<span class="ident">Rule</span>::<span class="ident">raw_text</span>, <span class="ident">i</span>);
+    }
+
+    <span class="kw">let</span> <span class="ident">s_not_escape</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">r&quot;\\{{hello}}&quot;</span>];
+    <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">s_not_escape</span>.<span class="ident">iter</span>() {
+        <span class="macro">assert_not_rule</span><span class="macro">!</span>(<span class="ident">Rule</span>::<span class="ident">raw_text</span>, <span class="ident">i</span>);
     }
 }
 
